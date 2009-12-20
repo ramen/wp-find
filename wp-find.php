@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: WP_Find
-Plugin URI: http://ramenlabs.com/
+Plugin URI: http://github.com/ramen/wp-find
 Description: Alternative query interface for WordPress content
 Version: 1.0
 Author: Dave Benjamin
