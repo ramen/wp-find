@@ -146,7 +146,7 @@ calling `filter()` multiple times or by passing an array:
         'year' => '2010',
         'monthnum' => '1',
     );
-    $jan_pages = WP_Find::pages->filter($jan_filter)->all();
+    $jan_pages = WP_Find::pages()->filter($jan_filter)->all();
 
 Here is a brief summary of the filters available to each type of query and the
 type of arguments they expect.
