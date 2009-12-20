@@ -202,3 +202,108 @@ type of arguments they expect.
 * `show_updated`: boolean; if true, an extra column called `link_category_f` is inserted with a UNIX timestamp version of `link_updated` (defaults to false)
 * `include`: comma-separated list of link IDs to include
 * `exclude`: comma-separated list of link IDs to exclude
+
+## Sorting
+
+Sort order is specified by calling the `order()` method on the query object.
+If this is not done, the default will be the same as the underlying WordPress
+API function. If `order()` is called with a single argument, that argument is
+the sort field, and sorting will be done in ascending order. The second
+argument can be "ASC" or "DESC" to specifiy ascending or descending order.
+
+The fields available for sorting depend on the type of query. Here is a
+summary:
+
+### Posts, pages, and attachments
+
+* `author`
+* `date` (default, descending order)
+* `title`
+* `modified`
+* `menu_order`
+* `parent`
+* `ID`
+* `rand`
+* `meta_value` (must be used with `meta()`)
+* `none` (WP 2.8+)
+* `comment_count` (WP 2.9+)
+
+### Tags and categories
+
+* `name` (default, ascending order)
+* `count`
+* `none` (uses `term_id`)
+
+### Post/page tags and categories
+
+* `name` (default, ascending order)
+* `count`
+
+### Links
+
+* `id`
+* `url`
+* `name` (default)
+* `target`
+* `description`
+* `owner`
+* `rating`
+* `updated`
+* `rel`
+* `notes`
+* `rss`
+* `length`
+* `rand`
+
+## Notes
+
+### Immutability
+
+Query objects are stateless and immutable. This means you can run the same
+query multiple times without side-effects, and you can build queries piece by
+piece, reusing portions as needed. For example:
+
+    $recent_posts = WP_Find::posts()->order_by('date', 'DESC')->limit(5);
+    $recent_news = $recent_posts->filter('tag', 'news');
+    $recent_weather = $recent_posts->filter('tag', 'weather');
+    $more_weather = $recent_weather->limit(10, 5);
+
+The database will not be queried until a call to `all()`, `one()`, or `get()`,
+so these intermediate queries can be reused and combined at no cost of
+efficiency. This type of interface may be surprising to those used to a
+mutable style:
+
+    // This doesn't do what you might expect.
+    $recent_posts = WP_Find::posts();
+    $recent_posts->order_by('date', 'DESC');
+    $recent_posts->limit(5);
+
+    // Do this instead:
+    $recent_posts = WP_Find::posts();
+    $recent_posts = $recent_posts->order_by('date', 'DESC');
+    $recent_posts = $recent_posts->limit(5);
+
+### Limits
+
+By default, limiting/pagination is turned off on all queries. This means that
+the simple call of:
+
+    WP_Find::posts()->all(); // HUGE!
+
+will return every post in the database. Make sure you specify a limit if the
+query could potentially return a large amount of data:
+
+    WP_Find::posts()->limit(50)->all();
+
+### SQL Debugging
+
+Any query object can be asked for the SQL it would generate by calling the
+`sql()` method. In the case of posts, pages, and attachments queries, this is
+determined by inspecting the "request" property of a `WP_Query` instance. For
+other queries, the underlying API function is called and `$wpdb->last_query`
+is returned.
+
+Due to implementation details, `sql()` always results in the query being run
+on the database and the results discarded; as such, it is mainly useful for
+debugging or generation of canned SQL queries to be pasted into phpMyAdmin,
+etc.
