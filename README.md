@@ -316,7 +316,7 @@ below:
 * `WP_Find::post_tags('all')`: return all fields
 * `WP_Find::post_tags('ids')`: return IDs only; results will be integers instead of objects
 * `WP_Find::post_tags('names')`: return names only; results will be strings instead of objects
-* `WP_Find::post_tags('all')`: return all fields, plus the `object_id` field from the term relationships table
+* `WP_Find::post_tags('all_with_object_id')`: return all fields, plus the `object_id` field from the term relationships table
 
 ### Links
 
