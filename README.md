@@ -255,6 +255,73 @@ summary:
 * `length`
 * `rand`
 
+## Fields
+
+Each of the factory functions accept an optional argument that specifies what
+fields to return when a query is executed. This helps to conserve I/O and
+memory consumption and make results simpler and easier to inspect.
+
+Many WordPress users are unaware of the fact that they are loading the entire
+contents of many pages when they are only trying to build a few links -- in
+order to render their navigation, for instance. This is a result of the fact
+that WordPress provides no easy way to exclude post content from the results
+of calls to `WP_Query`, `get_posts`, or `query_posts`. For pages, posts, and
+attachments, `WP_Find` lets you explicitly specify the fields you want in your
+result by passing an array of field names to their factory functions:
+
+    $pages_brief = WP_Find::pages(array('ID', 'post_name'))
+        ->limit(5)
+        ->all();
+
+This is made possible by temporarily registering a `posts_fields` filter,
+invoking `WP_Query`, and then unregistering the filter. Supplying an array of
+fields also causes the `suppress_filters` option to `WP_Query` to be disabled,
+which is necessary for the filter to work. This may produce surprising effects
+if you are using a plugin that also registers filters that affect `WP_Query`.
+As a general rule, you can expect that `suppress_filters` will be false if you
+specify the fields and true if you don't.
+
+If you specify fields for `posts()`, `pages()`, or `attachments()` queries,
+you will want to run your code with error reporting turned up high enough to
+include notices:
+
+    error_reporting(E_ALL);
+
+This way, you will be aware of any fields that are being referenced by your
+code as well as code internal to WordPress. You may find that you need to
+include a few more fields to avoid breaking certain assumptions about the
+presence of fields in the result.
+
+Fields can also be passed to the other factory methods, but only as a string
+from a predefined set, which typically includes "all", "ids", and "names" as
+options. The posts, pages, and attachments queries support this parameter
+style as well, for the sake of consistency. The available options are listed
+below:
+
+### Posts, pages, and attachments
+
+* `WP_Find::posts(array('ID', 'post_name', ...))`: specify fields as an array
+* `WP_Find::posts('all')`: return all fields (also has the effect of disabling `suppress_filters`)
+* `WP_Find::posts('ids')`: return IDs only; results will be integers instead of objects
+* `WP_Find::posts('names')`: return names only; results will be strings instead of objects
+
+### Tags and categories
+
+* `WP_Find::tags('all')`: return all fields
+* `WP_Find::tags('ids')`: return IDs only; results will be integers instead of objects
+* `WP_Find::tags('names')`: return names only; results will be strings instead of objects
+
+### Post/page tags and categories
+
+* `WP_Find::post_tags('all')`: return all fields
+* `WP_Find::post_tags('ids')`: return IDs only; results will be integers instead of objects
+* `WP_Find::post_tags('names')`: return names only; results will be strings instead of objects
+* `WP_Find::post_tags('all')`: return all fields, plus the `object_id` field from the term relationships table
+
+### Links
+
+_This feature is not available for links._
+
 ## Notes
 
 ### Immutability
