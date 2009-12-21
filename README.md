@@ -124,7 +124,7 @@ arguments, see the following documentation from the WordPress site:
 
 * Posts, pages, and attachments: [query_posts](http://codex.wordpress.org/Template_Tags/query_posts)
 * Tags and categories: [get_terms](http://codex.wordpress.org/Function_Reference/get_terms)
-* Links: [get_comments](http://codex.wordpress.org/Function_Reference/get_comments)
+* Comments: [get_comments](http://codex.wordpress.org/Function_Reference/get_comments)
 * Links: [get_bookmarks](http://codex.wordpress.org/Function_Reference/get_bookmarks)
 
 Note that some of the arguments, such as "orderby", "order", "limit",
