@@ -32,6 +32,10 @@ can query for several types of WordPress data:
 * `WP_Find::post_tags()`
 * `WP_Find::post_categories()`
 
+### Comments
+
+* `WP_Find::comments()`
+
 ### Links
 
 * `WP_Find::links()`
@@ -41,7 +45,7 @@ methods:
 
 * `filter(key, value)`: pass a filter parameter to the underlying API function
 * `filter(array)`: as above, but pass an array of filter parameters
-* `search(text)`: perform a full-text search
+* `search(text)`: perform a full-text search (not available for comments)
 * `order_by(field[, sort])`: specify an order field and sort direction ("ASC" or "DESC", defaults to "ASC")
 * `limit(limit[, offset])`: limit the number of results with an optional offset
 * `all()`: return all results as an array of objects
@@ -120,6 +124,7 @@ arguments, see the following documentation from the WordPress site:
 
 * Posts, pages, and attachments: [query_posts](http://codex.wordpress.org/Template_Tags/query_posts)
 * Tags and categories: [get_terms](http://codex.wordpress.org/Function_Reference/get_terms)
+* Links: [get_comments](http://codex.wordpress.org/Function_Reference/get_comments)
 * Links: [get_bookmarks](http://codex.wordpress.org/Function_Reference/get_bookmarks)
 
 Note that some of the arguments, such as "orderby", "order", "limit",
@@ -194,6 +199,11 @@ type of arguments they expect.
 * `child_of`: ID of parent term that results must be descendents of
 * `parent`: ID of parent term that results must be direct children of
 
+### Comments
+
+* `status`: "hold", "approve", or "spam"
+* `post_id`: ID of post or page that received the comments
+
 ### Links
 
 * `category`: comma-separated list of link category IDs
@@ -239,11 +249,15 @@ summary:
 * `name` (default, ascending order)
 * `count`
 
+### Comments
+
+* `comment_date_gmt` (default, descending order)
+
 ### Links
 
 * `id`
 * `url`
-* `name` (default)
+* `name` (default, ascending order)
 * `target`
 * `description`
 * `owner`
@@ -317,6 +331,10 @@ below:
 * `WP_Find::post_tags('ids')`: return IDs only; results will be integers instead of objects
 * `WP_Find::post_tags('names')`: return names only; results will be strings instead of objects
 * `WP_Find::post_tags('all_with_object_id')`: return all fields, plus the `object_id` field from the term relationships table
+
+### Comments
+
+_This feature is not available for comments._
 
 ### Links
 

@@ -76,6 +76,10 @@ class WP_Find {
         return new WP_FindPostTerms('category', $fields);
     }
 
+    function comments() {
+        return new WP_FindComments();
+    }
+
     function links() {
         return new WP_FindLinks();
     }
@@ -345,6 +349,70 @@ class WP_FindPostTerms {
             list($field, $sort) = $this->options['order_by'];
             $args['orderby'] = $field;
             $args['order'] = $sort;
+        }
+        return $args;
+    }
+}
+
+class WP_FindComments {
+    function WP_FindComments($options=array()) {
+        $this->options = $options;
+    }
+
+    function filter($key, $value=null) {
+        $options = $this->options;
+        if (is_array($key)) {
+            if (!isset($options['filter'])) {
+                $options['filter'] = array();
+            }
+            $options['filter'] = array_merge($options['filter'], $key);
+        } else {
+            $options['filter'][$key] = $value;
+        }
+        return new WP_FindComments($options);
+    }
+
+    function order_by($field, $sort='ASC') {
+        $options = $this->options;
+        $options['order_by'] = array($field, $sort);
+        return new WP_FindComments($options);
+    }
+
+    function limit($limit, $offset=null) {
+        $options = $this->options;
+        $options['limit'] = array($limit, $offset);
+        return new WP_FindComments($options);
+    }
+
+    function all() {
+        return get_comments($this->_build_args());
+    }
+
+    function one() {
+        $results = $this->all();
+        return isset($results[0]) ? $results[0] : null;
+    }
+
+    function sql() {
+        $this->all();
+        global $wpdb;
+        return $wpdb->last_query;
+    }
+
+    function _build_args() {
+        $args = array();
+        if (isset($this->options['limit'])) {
+            list($limit, $offset) = $this->options['limit'];
+            $args['number'] = $limit;
+            $args['offset'] = $offset;
+        }
+        if (isset($this->options['order_by'])) {
+            list($field, $sort) = $this->options['order_by'];
+            $args['orderby'] = $field;
+            $args['order'] = $sort;
+        }
+        if (isset($this->options['filter'])) {
+            $args = array_merge($args, $this->options['filter']);
         }
         return $args;
     }
