@@ -190,6 +190,9 @@ class WP_Find {
             $args['pagename'] = $args['name'];
             unset($args['name']);
         }
+        if (!isset($args['post_status']) && $this->post_type == 'attachment') {
+            $args['post_status'] = 'inherit';
+        }
         return $args;
     }
 
