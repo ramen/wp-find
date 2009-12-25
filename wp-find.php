@@ -142,7 +142,7 @@ class WP_Find {
             }
             return $names;
         }
-        return $results;
+        return array_map(array('WP_FindResult', 'post'), $results);
     }
 
     function one() {
@@ -281,7 +281,12 @@ class WP_FindTerms {
     }
 
     function all() {
-        return get_terms($this->taxonomy, $this->_build_args());
+        $results = get_terms($this->taxonomy, $this->_build_args());
+        if (isset($results[0]) && is_object($results[0])) {
+            return array_map(array('WP_FindResult', 'term'), $results);
+        } else {
+            return $results;
+        }
     }
 
     function one() {
@@ -331,7 +336,13 @@ class WP_FindPostTerms {
     }
 
     function get($id) {
-        return wp_get_object_terms($id, $this->taxonomy, $this->_build_args());
+        $results =
+            wp_get_object_terms($id, $this->taxonomy, $this->_build_args());
+        if (isset($results[0]) && is_object($results[0])) {
+            return array_map(array('WP_FindResult', 'term'), $results);
+        } else {
+            return $results;
+        }
     }
 
     function sql($id) {
@@ -385,7 +396,12 @@ class WP_FindComments {
     }
 
     function all() {
-        return get_comments($this->_build_args());
+        $results = get_comments($this->_build_args());
+        if (isset($results[0]) && is_object($results[0])) {
+            return array_map(array('WP_FindResult', 'comment'), $results);
+        } else {
+            return $results;
+        }
     }
 
     function one() {
@@ -455,7 +471,12 @@ class WP_FindLinks {
     }
 
     function all() {
-        return get_bookmarks($this->_build_args());
+        $results = get_bookmarks($this->_build_args());
+        if (isset($results[0]) && is_object($results[0])) {
+            return array_map(array('WP_FindResult', 'link'), $results);
+        } else {
+            return $results;
+        }
     }
 
     function one() {
@@ -483,6 +504,62 @@ class WP_FindLinks {
             $args = array_merge($args, $this->options['filter']);
         }
         return $args;
+    }
+}
+
+class WP_FindResult {
+    function WP_FindResult($data) {
+        foreach ((array) $data as $key => $value) {
+            $this->$key = $value;
+        }
+    }
+
+    function __toString() {
+        return print_r($this, true);
+    }
+
+    function post($post) {
+        return new WP_FindResultPost($post);
+    }
+
+    function term($term) {
+        return new WP_FindResultTerm($term);
+    }
+
+    function comment($comment) {
+        return new WP_FindResultComment($comment);
+    }
+
+    function link($link) {
+        return new WP_FindResultLink($link);
+    }
+
+    function url() {
+        return null;
+    }
+}
+
+class WP_FindResultPost extends WP_FindResult {
+    function url() {
+        return get_permalink($this->ID);
+    }
+}
+
+class WP_FindResultTerm extends WP_FindResult {
+    function url() {
+        return get_term_link($this, $this->taxonomy);
+    }
+}
+
+class WP_FindResultComment extends WP_FindResult {
+    function url() {
+        return get_comment_link($this);
+    }
+}
+
+class WP_FindResultLink extends WP_FindResult {
+    function url() {
+        return $this->link_url;
     }
 }
 ?>
