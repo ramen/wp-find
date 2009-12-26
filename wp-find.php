@@ -37,6 +37,8 @@ those of the authors and should not be interpreted as representing official
 policies, either expressed or implied, of Dave Benjamin.
 */
 
+if (!class_exists('WP_Find')):
+
 class WP_Find {
     function WP_Find($post_type, $fields=null, $options=array()) {
         $this->post_type = $post_type;
@@ -514,10 +516,6 @@ class WP_FindResult {
         }
     }
 
-    function __toString() {
-        return print_r($this, true);
-    }
-
     function post($post) {
         return new WP_FindResultPost($post);
     }
@@ -534,14 +532,18 @@ class WP_FindResult {
         return new WP_FindResultLink($link);
     }
 
-    function url() {
-        return null;
+    function __toString() {
+        return print_r($this, true);
     }
 }
 
 class WP_FindResultPost extends WP_FindResult {
     function url() {
         return get_permalink($this->ID);
+    }
+
+    function meta($key='', $single=false) {
+        return get_post_meta($this->ID, $key, $single);
     }
 }
 
@@ -555,6 +557,10 @@ class WP_FindResultComment extends WP_FindResult {
     function url() {
         return get_comment_link($this);
     }
+
+    function meta($key='', $single=false) {
+        return get_comment_meta($this->comment_ID, $key, $single);
+    }
 }
 
 class WP_FindResultLink extends WP_FindResult {
@@ -562,4 +568,6 @@ class WP_FindResultLink extends WP_FindResult {
         return $this->link_url;
     }
 }
+
+endif; // class_exists('WP_Find')
 ?>
