@@ -142,6 +142,9 @@ class WP_Find {
         $query = new WP_Query();
         $results = $query->query($this->_build_args());
         $this->_end_filters($filters);
+        if ($results instanceof WP_Error) {
+            return $results;
+        }
         if ($this->fields == 'ids') {
             $ids = array();
             foreach ($results as $result) {
@@ -161,7 +164,11 @@ class WP_Find {
 
     function one() {
         $results = $this->all();
-        return isset($results[0]) ? $results[0] : null;
+        if ($results instanceof WP_Error) {
+            return $results;
+        } else {
+            return isset($results[0]) ? $results[0] : null;
+        }
     }
 
     function sql() {
@@ -297,7 +304,9 @@ class WP_FindTerms {
 
     function all() {
         $results = get_terms($this->taxonomy, $this->_build_args());
-        if (isset($results[0]) && is_object($results[0])) {
+        if ($results instanceof WP_Error) {
+            return $results;
+        } elseif (isset($results[0]) && is_object($results[0])) {
             return array_map(array('WP_FindResult', 'term'), $results);
         } else {
             return $results;
@@ -306,7 +315,11 @@ class WP_FindTerms {
 
     function one() {
         $results = $this->all();
-        return isset($results[0]) ? $results[0] : null;
+        if ($results instanceof WP_Error) {
+            return $results;
+        } else {
+            return isset($results[0]) ? $results[0] : null;
+        }
     }
 
     function sql() {
@@ -353,7 +366,9 @@ class WP_FindPostTerms {
     function get($id) {
         $results =
             wp_get_object_terms($id, $this->taxonomy, $this->_build_args());
-        if (isset($results[0]) && is_object($results[0])) {
+        if ($results instanceof WP_Error) {
+            return $results;
+        } elseif (isset($results[0]) && is_object($results[0])) {
             return array_map(array('WP_FindResult', 'term'), $results);
         } else {
             return $results;
@@ -412,7 +427,9 @@ class WP_FindComments {
 
     function all() {
         $results = get_comments($this->_build_args());
-        if (isset($results[0]) && is_object($results[0])) {
+        if ($results instanceof WP_Error) {
+            return $results;
+        } elseif (isset($results[0]) && is_object($results[0])) {
             return array_map(array('WP_FindResult', 'comment'), $results);
         } else {
             return $results;
@@ -421,7 +438,11 @@ class WP_FindComments {
 
     function one() {
         $results = $this->all();
-        return isset($results[0]) ? $results[0] : null;
+        if ($results instanceof WP_Error) {
+            return $results;
+        } else {
+            return isset($results[0]) ? $results[0] : null;
+        }
     }
 
     function sql() {
@@ -487,7 +508,9 @@ class WP_FindLinks {
 
     function all() {
         $results = get_bookmarks($this->_build_args());
-        if (isset($results[0]) && is_object($results[0])) {
+        if ($results instanceof WP_Error) {
+            return $results;
+        } elseif (isset($results[0]) && is_object($results[0])) {
             return array_map(array('WP_FindResult', 'link'), $results);
         } else {
             return $results;
@@ -496,7 +519,11 @@ class WP_FindLinks {
 
     function one() {
         $results = $this->all();
-        return isset($results[0]) ? $results[0] : null;
+        if ($results instanceof WP_Error) {
+            return $results;
+        } else {
+            return isset($results[0]) ? $results[0] : null;
+        }
     }
 
     function sql() {
