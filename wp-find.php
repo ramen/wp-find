@@ -58,6 +58,10 @@ class WP_Find {
         return new WP_Find('attachment', $fields);
     }
 
+    function custom($post_type, $fields=null) {
+        return new WP_Find($post_type, $fields);        
+    }
+
     function tags($fields=null) {
         return new WP_FindTerms('post_tag', $fields);
     }
@@ -70,12 +74,20 @@ class WP_Find {
         return new WP_FindTerms('link_category', $fields);
     }
 
+    function terms($taxonomy, $fields=null) {
+        return new WP_FindTerms($taxonomy, $fields);        
+    }
+
     function post_tags($fields=null) {
         return new WP_FindPostTerms('post_tag', $fields);
     }
 
     function post_categories($fields=null) {
         return new WP_FindPostTerms('category', $fields);
+    }
+
+    function post_terms($taxonomy, $fields=null) {
+        return new WP_FindPostTerms($taxonomy, $fields);        
     }
 
     function comments() {
@@ -196,7 +208,8 @@ class WP_Find {
             $args['pagename'] = $args['name'];
             unset($args['name']);
         }
-        if (!isset($args['post_status']) && $this->post_type == 'attachment') {
+        if (!isset($args['post_status'])
+            && in_array($this->post_type, array('attachment', 'revision'))) {
             $args['post_status'] = 'inherit';
         }
         return $args;
