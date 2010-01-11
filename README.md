@@ -158,6 +158,15 @@ type of arguments they expect.
 
 ### Posts, pages, and attachments
 
+* `ID`: ID of post or page (use this instead of `p` or `page_id`)
+* `name`: name of post or page (use this instead of `pagename`)
+* `post_name`: alias for `name`
+* `post__in`: array of post IDs to include
+* `post__not_in`: array of post IDs to exclude
+* `post_status`: one of "publish", "pending", "draft", "future", "private", "trash", "inherit"
+* `post_parent`: ID of parent page
+* `author`: ID of author (if negative, posts belonging to author ID will be excluded)
+* `author_name`: name of author (`user_nicename`)
 * `cat`: ID or comma-separated list of IDs of categories (if negative, posts belonging to category ID will be excluded)
 * `category_name`: name of category
 * `category__and`: array of category IDs, all of which must be present
@@ -170,15 +179,6 @@ type of arguments they expect.
 * `tag__not_in`: array of tag IDs, none of which may be present
 * `tag_slug__and`: array of tag slugs, all of which must be present
 * `tag_slug__in`: array of tag slugs, one of which must be present
-* `author`: ID of author (if negative, posts belonging to author ID will be excluded)
-* `author_name`: name of author (`user_nicename`)
-* `ID`: ID of post or page (use this instead of `p` or `page_id`)
-* `name`: name of post or page (use this instead of `pagename`)
-* `post_name`: alias for `name`
-* `post__in`: array of post IDs to include
-* `post__not_in`: array of post IDs to exclude
-* `post_status`: one of "publish", "pending", "draft", "future", "private", "trash", "inherit"
-* `post_parent`: ID of parent page
 * `hour`: hour (from 0 to 23)
 * `minute`: minute (from 0 to 60)
 * `second`: second (0 to 60)
