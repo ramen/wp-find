@@ -173,7 +173,6 @@ type of arguments they expect.
 * `category__in`: array of category IDs, one of which must be present
 * `category__not_in`: array of category IDs, none of which may be present
 * `tag`: name of a tag; separate multiple tags with ',' for "or", '+' for "and"
-* `tag_id`: ID of a tag
 * `tag__and`: array of tag IDs, all of which must be present
 * `tag__in`: array of tag IDs, one of which must be present
 * `tag__not_in`: array of tag IDs, none of which may be present
