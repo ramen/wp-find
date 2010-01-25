@@ -197,8 +197,12 @@ class WP_Find {
         }
         if (isset($this->options['order_by'])) {
             list($field, $sort) = $this->options['order_by'];
-            $args['orderby'] = $field;
-            $args['order'] = $sort;
+            if (strtoupper($sort) == 'SQL') {
+                $args['suppress_filters'] = false;
+            } else {
+                $args['orderby'] = $field;
+                $args['order'] = $sort;
+            }
         }
         if (isset($this->options['filter'])) {
             $args = array_merge($args, $this->options['filter']);
@@ -254,7 +258,19 @@ class WP_Find {
             add_filter('posts_fields', $filter);
             $filters['posts_fields'] = $filter;
         }
+        if (isset($this->options['order_by'])) {
+            list($field, $sort) = $this->options['order_by'];
+            if (strtoupper($sort) == 'SQL') {
+                $filter = array(&$this, '_order_by_sql');
+                add_filter('posts_orderby', $filter);
+                $filters['posts_orderby'] = $filter;
+            }
+        }
         return $filters;
+    }
+
+    function _order_by_sql() {
+        return $this->options['order_by'][0];
     }
 
     function _end_filters($filters) {
