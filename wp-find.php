@@ -227,34 +227,9 @@ class WP_Find {
     }
 
     function _start_filters() {
-        global $wpdb;
         $filters = array();
         if ($this->fields) {
-            $fields = array();
-            if (is_array($this->fields)) {
-                foreach ($this->fields as $field) {
-                    $field = strtolower($field);
-                    if ($field == 'id') $field = 'ID';
-                    $fields[] = "$wpdb->posts.$field";
-                }
-            } else {
-                switch ($this->fields) {
-                    case 'names':
-                        $fields[] = "$wpdb->posts.post_name";
-                        // fall-through
-                    case 'ids':
-                        $fields[] = "$wpdb->posts.ID";
-                        $fields[] = "$wpdb->posts.post_type";
-                        $fields[] = "$wpdb->posts.post_status";
-                        break;
-                    case 'all':
-                    default:
-                        $fields[] = "$wpdb->posts.*";
-                        break;
-                }
-            }
-            $fields = implode(', ', $fields);
-            $filter = create_function('', "return '$fields';");
+            $filter = array(&$this, '_custom_fields');
             add_filter('posts_fields', $filter);
             $filters['posts_fields'] = $filter;
         }
@@ -267,6 +242,38 @@ class WP_Find {
             }
         }
         return $filters;
+    }
+
+    function _custom_fields() {
+        global $wpdb;
+        $fields = array();
+        if (is_array($this->fields)) {
+            foreach ($this->fields as $field) {
+                if (preg_match('/^[A-Za-z_]+$/', $field)) {
+                    $field = strtolower($field);
+                    if ($field == 'id') $field = 'ID';
+                    $fields[] = "$wpdb->posts.$field";
+                } else {
+                    $fields[] = $field;
+                }
+            }
+        } else {
+            switch ($this->fields) {
+                case 'names':
+                    $fields[] = "$wpdb->posts.post_name";
+                    // fall-through
+                case 'ids':
+                    $fields[] = "$wpdb->posts.ID";
+                    $fields[] = "$wpdb->posts.post_type";
+                    $fields[] = "$wpdb->posts.post_status";
+                    break;
+                case 'all':
+                default:
+                    $fields[] = "$wpdb->posts.*";
+                    break;
+            }
+        }
+        return implode(', ', $fields);        
     }
 
     function _order_by_sql() {
