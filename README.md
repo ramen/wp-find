@@ -168,6 +168,7 @@ type of arguments they expect.
 * `post__not_in`: array of post IDs to exclude
 * `post_status`: one of "publish", "pending", "draft", "future", "private", "trash", "inherit"
 * `post_parent`: ID of parent page
+* `post_mime_type`: mime-type, can be "image" to match image attachments
 * `author`: ID of author (if negative, posts belonging to author ID will be excluded)
 * `author_name`: name of author (`user_nicename`)
 * `cat`: ID or comma-separated list of IDs of categories (if negative, posts belonging to category ID will be excluded)
