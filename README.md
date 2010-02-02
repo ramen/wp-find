@@ -17,20 +17,23 @@ can query for several types of WordPress data:
 
 ### Posts, pages, and attachments
 
-* `WP_Find::posts()`
-* `WP_Find::pages()`
-* `WP_Find::attachments()`
+* `WP_Find::posts([fields])`
+* `WP_Find::pages([fields])`
+* `WP_Find::attachments([fields])`
+* `WP_Find::custom(post_type[, fields])`
 
 ### Tags and categories
 
-* `WP_Find::tags()`
-* `WP_Find::categories()`
-* `WP_Find::link_categories()`
+* `WP_Find::tags([fields])`
+* `WP_Find::categories([fields])`
+* `WP_Find::link_categories([fields])`
+* `WP_Find::terms(taxonomy[, fields])`
 
 ### Post/page tags and categories
 
-* `WP_Find::post_tags()`
-* `WP_Find::post_categories()`
+* `WP_Find::post_tags([fields])`
+* `WP_Find::post_categories([fields])`
+* `WP_Find::post_terms(taxonomy[, fields])`
 
 ### Comments
 
