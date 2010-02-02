@@ -579,6 +579,10 @@ class WP_FindResult {
         }
     }
 
+    function __toString() {
+        return print_r($this, true);
+    }
+
     function post($post) {
         return new WP_FindResultPost($post);
     }
@@ -594,10 +598,6 @@ class WP_FindResult {
     function link($link) {
         return new WP_FindResultLink($link);
     }
-
-    function __toString() {
-        return print_r($this, true);
-    }
 }
 
 class WP_FindResultPost extends WP_FindResult {
@@ -607,6 +607,17 @@ class WP_FindResultPost extends WP_FindResult {
 
     function meta($key='', $single=false) {
         return get_post_meta($this->ID, $key, $single);
+    }
+
+    function image($size='medium') {
+        $image = image_downsize($this->ID, $size);
+        if (!$image) return $image;
+        return array(
+            'url' => $image[0],
+            'width' => $image[1],
+            'height' => $image[2],
+            'is_intermediate' => $image[3],
+        );
     }
 }
 
