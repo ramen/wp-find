@@ -609,6 +609,10 @@ class WP_FindResultPost extends WP_FindResult {
         return get_post_meta($this->ID, $key, $single);
     }
 
+    function title() {
+        return apply_filters('the_title', $this->post_title);
+    }
+
     function image($size='medium') {
         $image = image_downsize($this->ID, $size);
         if (!$image) return $image;
