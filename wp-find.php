@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: WP_Find
+Plugin Name: WP-Find
 Plugin URI: http://github.com/ramen/wp-find
 Description: Alternative query interface for WordPress content
 Version: 1.0
@@ -603,6 +603,10 @@ class WP_FindResult {
 class WP_FindResultPost extends WP_FindResult {
     function url() {
         return get_permalink($this->ID);
+    }
+
+    function admin_url() {
+        return get_edit_post_link($this->ID, '');
     }
 
     function meta($key='', $single=false) {
