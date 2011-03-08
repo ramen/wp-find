@@ -343,6 +343,33 @@ _This feature is not available for comments._
 
 _This feature is not available for links._
 
+## Results
+
+In addition to the fields normally returned from WordPress API queries, the
+result objects returned from `WP_Find` also provide a few helpful methods. The
+methods available depend on the type of query:
+
+### Posts, pages, and attachments
+
+* `url()`: returns the public URL to view the post
+* `admin_url()`: returns the admin URL to edit the post
+* `meta($key='', $single=false)`: returns the meta values associated with meta key (also known as custom field); if `$single` is true, a single value is returned instead of an array
+* `title()`: returns the post title, processed by the standard `the_title` filter
+* `image($size='medium')`: returns an associative array of data related to an image attachment at a given size (possible values for `$size` include "thumbnail", "medium", "large", and "full"); four keys are available: `url`, a URL to the image; `width` and `height`, the size of the image in pixels; and `is_intermediate`, a boolean which is true if the URL points to a resized image
+
+### Tags and categories
+
+* `url()`: returns the public URL to view the corresponding archive
+
+### Comments
+
+* `url()`: returns the public URL to view the comment
+* `meta($key='', $single=false)`: returns the meta values associated with meta key (also known as custom field); if `$single` is true, a single value is returned instead of an array
+
+### Links
+
+* `url()`: returns the link URL (same as `$link->link_url`)
+
 ## Notes
 
 ### Immutability
