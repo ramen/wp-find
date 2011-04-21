@@ -163,7 +163,11 @@ class WP_Find {
     }
 
     function one() {
-        $results = $this->all();
+        if (isset($this->options['limit'])) {
+            $results = $this->all();
+        } else {
+            $results = $this->limit(1)->all();
+        }
         if ($results instanceof WP_Error) {
             return $results;
         } else {
@@ -338,7 +342,11 @@ class WP_FindTerms {
     }
 
     function one() {
-        $results = $this->all();
+        if (isset($this->options['limit'])) {
+            $results = $this->all();
+        } else {
+            $results = $this->limit(1)->all();
+        }
         if ($results instanceof WP_Error) {
             return $results;
         } else {
@@ -461,7 +469,11 @@ class WP_FindComments {
     }
 
     function one() {
-        $results = $this->all();
+        if (isset($this->options['limit'])) {
+            $results = $this->all();
+        } else {
+            $results = $this->limit(1)->all();
+        }
         if ($results instanceof WP_Error) {
             return $results;
         } else {
@@ -542,7 +554,11 @@ class WP_FindLinks {
     }
 
     function one() {
-        $results = $this->all();
+        if (isset($this->options['limit'])) {
+            $results = $this->all();
+        } else {
+            $results = $this->limit(1)->all();
+        }
         if ($results instanceof WP_Error) {
             return $results;
         } else {
