@@ -3,7 +3,7 @@
 Plugin Name: WP-Find
 Plugin URI: http://github.com/ramen/wp-find
 Description: Alternative query interface for WordPress content
-Version: 1.0
+Version: 1.0.1
 Author: Dave Benjamin
 Author URI: http://ramenlabs.com/
 */
@@ -183,6 +183,7 @@ class WP_Find {
         $args = array(
             'post_type' => $this->post_type,
             'nopaging' => true,
+            'no_found_rows' => true,
             'caller_get_posts' => true,
             'suppress_filters' => true,
         );
