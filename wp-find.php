@@ -652,5 +652,5 @@ class WP_FindResultLink extends WP_FindResult {
     }
 }
 
-endif; // class_exists('WP_Find')
+endif; // !class_exists('WP_Find')
 ?>
